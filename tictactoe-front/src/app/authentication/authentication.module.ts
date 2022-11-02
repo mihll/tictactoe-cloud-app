@@ -9,12 +9,14 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { NgxTrimDirectiveModule } from "ngx-trim-directive";
 import { MatButtonModule } from "@angular/material/button";
+import { SignUpComponent } from './sign-up/sign-up.component';
 
 
 
 @NgModule({
   declarations: [
-    LoginComponent
+    LoginComponent,
+    SignUpComponent
   ],
   imports: [
     CommonModule,

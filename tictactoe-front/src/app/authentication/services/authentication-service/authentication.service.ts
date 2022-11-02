@@ -3,6 +3,7 @@ import { BehaviorSubject, map, Observable } from 'rxjs';
 import { UserAuth } from "../../models/UserAuth";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../../../../environments/environment";
+import { SignupRequest } from "../../models/signupRequest";
 
 @Injectable({
   providedIn: 'root'
@@ -43,5 +44,9 @@ export class AuthenticationService {
     sessionStorage.clear();
     this.userAuthSubject.next(null);
     return this.http.post<any>(`${environment.apiUrl}/logout`, {},{withCredentials: true})
+  }
+
+  signup(signupRequest: SignupRequest): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/signup`, signupRequest);
   }
 }

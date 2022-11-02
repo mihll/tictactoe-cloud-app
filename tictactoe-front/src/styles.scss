@@ -2,3 +2,135 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.fill-remaining-space {
+  flex: 1 1 auto;
+}
+
+.formCardContainer {
+  padding: 2em;
+  display: flex;
+  justify-content: center;
+
+  mat-card-content {
+    margin-top: 1em;
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.formActionButtons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1em;
+}
+
+.small-mobilePadding {
+  padding: 1em !important;
+}
+
+.no-mobilePadding {
+  padding: 0 !important;
+}
+
+.contentContainer {
+  padding: 2em;
+  display: flex;
+  justify-content: center;
+}
+
+.toolbarTitle {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toolbarButtons button {
+  margin-left: 1em;
+}
+
+//snackbars themes
+.snackbar-success {
+  background-color: #9ccc65;
+  color: black;
+}
+
+.snackbar-error {
+  background-color: #bf5555;
+  color: white;
+}
+
+//table style compliant with Material Design guidelines
+.mat-table {
+  width: 100%;
+
+  .mat-header-row {
+    height: 48px;
+  }
+
+  .mat-header-cell {
+    padding-left: 16px;
+    padding-right: 40px;
+
+
+    &:first-of-type {
+      padding-left: 16px;
+    }
+
+    &:last-of-type {
+      padding-right: 16px;
+
+      &[mat-sort-header]:not([arrowposition="before"]) {
+        padding-right: 16px;
+      }
+    }
+
+    &[mat-sort-header] {
+
+      &[arrowposition="before"] {
+        padding-left: 0;
+      }
+
+      &:not([arrowposition="before"]) {
+        padding-right: 22px;
+      }
+
+    }
+
+    &>.mat-sort-header-container {
+      display: inline-flex;
+    }
+  }
+
+  .mat-cell {
+    padding: 8px 40px 8px 16px;
+
+    &:first-of-type {
+      padding-left: 16px;
+    }
+
+    &:last-of-type {
+      padding-right: 16px;
+    }
+  }
+
+  .mat-footer-cell {
+    padding-left: 16px;
+    padding-right: 40px;
+
+    &:first-of-type {
+      padding-left: 16px;
+    }
+
+    &:last-of-type {
+      padding-right: 16px;
+    }
+
+    .mat-paginator {
+      margin-left: -16px;
+      margin-right: -16px;
+    }
+  }
+}

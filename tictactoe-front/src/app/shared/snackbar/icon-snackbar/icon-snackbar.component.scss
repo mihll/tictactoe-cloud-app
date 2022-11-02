@@ -1,0 +1,11 @@
+@import '../../../../../node_modules/@angular/material/theming';
+
+:host {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+mat-icon {
+  margin-right: 5px;
+}

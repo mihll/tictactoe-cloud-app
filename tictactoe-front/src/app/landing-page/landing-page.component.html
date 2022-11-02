@@ -1,0 +1,12 @@
+<div class="firstSection">
+  <div class="centerContent">
+    <div class="mainTitle">
+      <p class="title">TicTacToe</p>
+      <p class="subtitle">Fun online game</p>
+    </div>
+    <div class="mainButtons">
+      <button *ngIf="!isLoggedIn" mat-flat-button routerLink="/login">Log in to play a game</button>
+      <button *ngIf="isLoggedIn" mat-flat-button routerLink="/browseGames">Play a game of Tic-Tac-Toe!</button>
+    </div>
+  </div>
+</div>

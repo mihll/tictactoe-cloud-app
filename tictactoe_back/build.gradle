@@ -38,6 +38,8 @@ dependencies {
     implementation group: 'org.passay', name: 'passay', version: '1.6.2'
     // https://mvnrepository.com/artifact/com.google.guava/guava
     implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
+    // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.12'
 }
 
 tasks.named('test') {

@@ -1,6 +1,7 @@
 package com.mkierzkowski.tictactoe_back.service;
 
 import com.mkierzkowski.tictactoe_back.dto.request.UserSignupRequestDto;
+import com.mkierzkowski.tictactoe_back.exception.ValidationException;
 import com.mkierzkowski.tictactoe_back.model.user.User;
 import com.mkierzkowski.tictactoe_back.repository.user.UserRepository;
 import com.mkierzkowski.tictactoe_back.security.AppUserDetails;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.Errors;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
@@ -23,11 +25,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void signup(UserSignupRequestDto userSignupRequestDto) {
+    public void signup(UserSignupRequestDto userSignupRequestDto, Errors errors) {
 
-        Optional<User> existingUser = userRepository.findByEmail(userSignupRequestDto.getEmail());
-        if (existingUser.isPresent()) {
-            throw new RuntimeException();
+        Optional<User> existingEmailUser = userRepository.findByEmail(userSignupRequestDto.getEmail());
+        if (existingEmailUser.isPresent()) {
+            errors.rejectValue("email", "error.emailExists", "error.emailExists");
+            throw new ValidationException(errors);
+        }
+
+        Optional<User> existingUsernameUser = userRepository.findByUsername(userSignupRequestDto.getUsername());
+        if (existingUsernameUser.isPresent()) {
+            errors.rejectValue("username", "error.usernameExists", "error.usernameExists");
+            throw new ValidationException(errors);
         }
 
         User registeredUser = new User()

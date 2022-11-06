@@ -7,7 +7,6 @@ import java.util.List;
 
 @Getter
 public class ExceptionDto {
-
     private final GlobalException globalException;
 
     private final List<ObjectValidationResponse> validationErrors;

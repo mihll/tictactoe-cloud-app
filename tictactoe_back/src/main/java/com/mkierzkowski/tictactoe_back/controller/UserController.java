@@ -6,14 +6,16 @@ import com.mkierzkowski.tictactoe_back.model.user.User;
 import com.mkierzkowski.tictactoe_back.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/user")
-public class UserController {
+public class UserController extends BaseController {
 
     @Autowired
     UserService userService;
@@ -29,8 +31,9 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody @Valid UserSignupRequestDto userSignupRequestDto) {
-        userService.signup(userSignupRequestDto);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<?> signup(@RequestBody @Valid UserSignupRequestDto userSignupRequestDto, Errors errors) {
+        userService.signup(userSignupRequestDto, errors);
         return ResponseEntity.ok().build();
     }
 }

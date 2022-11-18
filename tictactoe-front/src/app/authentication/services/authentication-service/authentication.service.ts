@@ -58,6 +58,6 @@ export class AuthenticationService {
   }
 
   signup(signupRequest: SignupRequest): Observable<any> {
-    return this.http.post<any>(`${environment.apiUrl}/signup`, signupRequest);
+    return this.http.post<any>(`${environment.apiUrl}/user/signup`, signupRequest);
   }
 }

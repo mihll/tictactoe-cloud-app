@@ -15,6 +15,7 @@ import { MatListModule } from "@angular/material/list";
 import { MatIconModule } from "@angular/material/icon";
 import { MatRippleModule } from "@angular/material/core";
 import { MatMenuModule } from "@angular/material/menu";
+import { GameModule } from "./game/game.module";
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { MatMenuModule } from "@angular/material/menu";
     AuthenticationModule,
     SharedModule,
     BrowserModule,
+    GameModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MatSliderModule,

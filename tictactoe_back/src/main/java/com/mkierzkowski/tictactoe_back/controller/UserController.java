@@ -3,7 +3,7 @@ package com.mkierzkowski.tictactoe_back.controller;
 import com.mkierzkowski.tictactoe_back.dto.request.UserSignupRequestDto;
 import com.mkierzkowski.tictactoe_back.dto.response.UserResponseDto;
 import com.mkierzkowski.tictactoe_back.model.user.User;
-import com.mkierzkowski.tictactoe_back.service.UserService;
+import com.mkierzkowski.tictactoe_back.service.user.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.mkierzkowski.tictactoe_back.service;
+package com.mkierzkowski.tictactoe_back.service.user;
 
 import com.mkierzkowski.tictactoe_back.dto.request.UserSignupRequestDto;
 import com.mkierzkowski.tictactoe_back.model.user.User;

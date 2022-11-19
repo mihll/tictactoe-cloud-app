@@ -7,6 +7,8 @@ import { MatButtonModule } from "@angular/material/button";
 import { RouterLink } from "@angular/router";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatIconModule } from "@angular/material/icon";
+import { SharedModule } from "../shared/shared.module";
+import { MatListModule } from "@angular/material/list";
 
 
 
@@ -15,14 +17,16 @@ import { MatIconModule } from "@angular/material/icon";
     BrowseGamesComponent,
     LeaderboardsComponent
   ],
-    imports: [
-        CommonModule,
-        FlexModule,
-        MatButtonModule,
-        RouterLink,
-        ExtendedModule,
-        MatToolbarModule,
-        MatIconModule
-    ]
+  imports: [
+    CommonModule,
+    FlexModule,
+    MatButtonModule,
+    RouterLink,
+    ExtendedModule,
+    MatToolbarModule,
+    MatIconModule,
+    SharedModule,
+    MatListModule
+  ]
 })
 export class GameModule { }

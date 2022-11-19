@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/fo
 import { ActivatedRoute, Router } from "@angular/router";
 import { SnackbarService } from "../../shared/snackbar/snackbar-service/snackbar.service";
 import { AuthenticationService } from "../services/authentication-service/authentication.service";
-import { SignupRequest } from "../models/signupRequest";
+import { SignupRequest } from "../models/SignupRequest";
 import {
   checkEmailMismatch,
   checkPasswordsMismatch,

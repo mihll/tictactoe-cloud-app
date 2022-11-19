@@ -134,3 +134,19 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     }
   }
 }
+
+.centerInfo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+
+  font-size: large;
+  padding-top: 16px;
+
+  .largeIcon {
+    font-size: 50px !important;
+    line-height: 50px !important;
+  }
+}

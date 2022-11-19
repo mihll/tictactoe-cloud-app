@@ -3,7 +3,7 @@ import { BehaviorSubject, map, Observable, switchMap } from 'rxjs';
 import { UserAuth } from "../../models/UserAuth";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "../../../../environments/environment";
-import { SignupRequest } from "../../models/signupRequest";
+import { SignupRequest } from "../../models/SignupRequest";
 
 @Injectable({
   providedIn: 'root'

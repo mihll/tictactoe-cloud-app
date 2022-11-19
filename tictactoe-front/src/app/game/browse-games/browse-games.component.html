@@ -1,11 +1,34 @@
+<script src="../../../test.ts"></script>
+<app-loading-spinner [show]="loading"></app-loading-spinner>
 <mat-toolbar>
   <div class="toolbarTitle">Browse games</div>
+  <button mat-icon-button (click)="reloadData()">
+    <mat-icon>refresh</mat-icon>
+  </button>
   <span class="fill-remaining-space"></span>
-  <button mat-flat-button color="primary">
+  <button mat-flat-button color="primary" (click)="addNewGame()">
     New game
     <mat-icon>add</mat-icon>
   </button>
 </mat-toolbar>
-<div class="contentContainer" ngClass.xs="small-mobilePadding">
-  <a mat-raised-button color="primary" href="https://www.google.com/search?q=tic+tac+toe">PLAY THE GAME</a>
+<div  ngClass.xs="small-mobilePadding">
+  <div *ngIf="availableGames.length != 0; else noAvailableGames" fxFill>
+    <mat-list *ngFor="let availableGame of availableGames; let last = last">
+      <mat-list-item>
+        Game against:
+        <div class="opponentUsername">{{availableGame.oponentUsername}}</div>
+        <span class="fill-remaining-space"></span>
+        <button mat-flat-button color="primary">
+          Join
+        </button>
+      </mat-list-item>
+      <mat-divider *ngIf="!last"></mat-divider>
+    </mat-list>
+  </div>
+  <ng-template #noAvailableGames>
+    <div class="centerInfo">
+      <mat-icon inline class="largeIcon">videogame_asset_off</mat-icon>
+      There are no games available.
+    </div>
+  </ng-template>
 </div>

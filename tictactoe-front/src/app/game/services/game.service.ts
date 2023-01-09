@@ -5,6 +5,7 @@ import { environment } from "../../../environments/environment";
 import { map } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { CreateNewGameResponse } from "../models/CreateNewGameResponse";
+import { GameDetails } from "../models/GameDetails";
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,15 @@ export class GameService {
       .pipe(map(response => response.availableGames));
   }
 
+  getGameDetails(gameId: string) : Observable<GameDetails> {
+    return this.http.get<any>(`${this.apiURL}/${gameId}`,{withCredentials: true});
+  }
+
   createNewGame() : Observable<CreateNewGameResponse> {
     return this.http.post<CreateNewGameResponse>(`${this.apiURL}/new`, {},{withCredentials: true})
+  }
+
+  leaveGame(gameId: string) : Observable<any> {
+    return this.http.post<any>(`${this.apiURL}/${gameId}/leave`,{},{withCredentials: true});
   }
 }

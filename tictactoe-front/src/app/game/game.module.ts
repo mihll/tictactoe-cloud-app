@@ -9,13 +9,15 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatIconModule } from "@angular/material/icon";
 import { SharedModule } from "../shared/shared.module";
 import { MatListModule } from "@angular/material/list";
+import { PlayGameComponent } from './play-game/play-game.component';
 
 
 
 @NgModule({
   declarations: [
     BrowseGamesComponent,
-    LeaderboardsComponent
+    LeaderboardsComponent,
+    PlayGameComponent
   ],
   imports: [
     CommonModule,

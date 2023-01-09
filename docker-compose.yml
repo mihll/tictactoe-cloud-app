@@ -1,0 +1,29 @@
+version: '3'
+services:
+  db:
+    image: 'mysql:8.0.31'
+    volumes:
+            - ./tictactoe_back/src/main/resources/create_database.sql:/docker-entrypoint-initdb.d/create_database.sql
+    expose:
+           - "3306"
+    restart: on-failure
+
+  backend:
+    build: ./tictactoe_back/
+    environment:
+            SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/db_tictactoe?serverTimezone=Europe/Warsaw
+            DATABASE_USERNAME: springuser
+            DATABASE_PASSWORD: j248Y2d3qW6xWYVi4DRUEZun686JvgDA
+    ports:
+           - "8080:8080"
+    depends_on:
+           - db
+    restart: on-failure
+
+  frontend:
+    build: ./tictactoe-front/
+    ports:
+           - "80:80"
+    depends_on:
+           - backend
+    restart: on-failure

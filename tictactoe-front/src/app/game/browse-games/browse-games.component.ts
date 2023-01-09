@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SnackbarService } from "../../shared/snackbar/snackbar-service/snackbar.service";
 import { AvailableGame } from "../models/AvailableGame";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { GameService } from "../services/game.service";
 
 @Component({
@@ -16,7 +16,8 @@ export class BrowseGamesComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private snackbarService: SnackbarService,
-    private gameService: GameService
+    private gameService: GameService,
+    private router: Router
   ) {
     this.availableGames = this.activatedRoute.snapshot.data['availableGames'];
   }
@@ -34,8 +35,14 @@ export class BrowseGamesComponent implements OnInit {
 
   addNewGame() : void {
     this.gameService.createNewGame().subscribe(response => {
-      this.snackbarService.openSuccessSnackbar(`New game created successfully! (ID: ${response.id})`)
+      this.router.navigate([`/playGame/${response.id}`]).then(() =>
+        this.snackbarService.openSuccessSnackbar(`New game created successfully!`)
+      )
     })
+  }
+
+  joinGame(gameId: string) : void {
+    this.router.navigate([`/playGame/${gameId}`]);
   }
 
 }

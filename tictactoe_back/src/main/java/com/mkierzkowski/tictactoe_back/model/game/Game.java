@@ -3,12 +3,13 @@ package com.mkierzkowski.tictactoe_back.model.game;
 import com.mkierzkowski.tictactoe_back.model.user.User;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
-import java.util.Date;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "games")
@@ -16,9 +17,10 @@ import java.util.Date;
 @Setter
 @Accessors(chain = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class Game {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     @ManyToOne
@@ -26,4 +28,14 @@ public class Game {
 
     @ManyToOne
     User player2;
+
+    @NotNull
+    GameStatus status = GameStatus.WAITING_FOR_OTHER_PLAYER;
+
+    @ManyToOne
+    User winnerPlayer;
+
+    public Game(User gameCreator) {
+        this.player1 = gameCreator;
+    }
 }

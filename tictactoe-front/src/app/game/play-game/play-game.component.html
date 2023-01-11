@@ -1,6 +1,9 @@
 <app-loading-spinner [show]="loading"></app-loading-spinner>
 <mat-toolbar>
-  <div class="toolbarTitle">Game {{gameDetails.id}} - {{gameDetails.status}}</div>
+  <div class="toolbarTitle">Game {{gameDetails.id}} - {{titleText}}</div>
+  <button mat-icon-button (click)="updateGame()">
+    <mat-icon>refresh</mat-icon>
+  </button>
   <span class="fill-remaining-space"></span>
   <button mat-flat-button color="primary" (click)="promptForLeaveConfirmation()">
     Leave game

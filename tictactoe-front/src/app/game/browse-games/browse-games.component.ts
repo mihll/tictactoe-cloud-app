@@ -42,7 +42,11 @@ export class BrowseGamesComponent implements OnInit {
   }
 
   joinGame(gameId: string) : void {
-    this.router.navigate([`/playGame/${gameId}`]);
+    this.gameService.joinGame(gameId).subscribe(() => {
+      this.router.navigate([`/playGame/${gameId}`]).then(() =>
+        this.snackbarService.openSuccessSnackbar(`Successfully joined the game!`)
+      )
+    })
   }
 
 }

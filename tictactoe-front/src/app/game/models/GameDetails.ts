@@ -9,5 +9,7 @@ export interface GameDetails {
   player1Name: string;
   player2Name: string;
 
+  opponentPlayerNumber: number;
+
   status: GameStatus;
 }

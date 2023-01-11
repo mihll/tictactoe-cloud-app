@@ -31,6 +31,10 @@ export class GameService {
     return this.http.post<CreateNewGameResponse>(`${this.apiURL}/new`, {},{withCredentials: true})
   }
 
+  joinGame(gameId: string) : Observable<any> {
+    return this.http.post<any>(`${this.apiURL}/${gameId}/join`,{},{withCredentials: true});
+  }
+
   leaveGame(gameId: string) : Observable<any> {
     return this.http.post<any>(`${this.apiURL}/${gameId}/leave`,{},{withCredentials: true});
   }

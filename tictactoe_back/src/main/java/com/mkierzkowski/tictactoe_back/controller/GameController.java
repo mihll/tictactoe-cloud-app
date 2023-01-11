@@ -5,7 +5,9 @@ import com.mkierzkowski.tictactoe_back.dto.response.CreateNewGameResponseDto;
 import com.mkierzkowski.tictactoe_back.dto.response.availableGames.GetAvailableGamesResponseDto;
 import com.mkierzkowski.tictactoe_back.dto.response.gameDetails.GetGameDetailsResponseDto;
 import com.mkierzkowski.tictactoe_back.model.game.Game;
+import com.mkierzkowski.tictactoe_back.model.user.User;
 import com.mkierzkowski.tictactoe_back.service.game.GameService;
+import com.mkierzkowski.tictactoe_back.service.user.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/game")
@@ -20,6 +23,9 @@ public class GameController extends BaseController {
 
     @Autowired
     GameService gameService;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     ModelMapper modelMapper;
@@ -47,8 +53,26 @@ public class GameController extends BaseController {
     @GetMapping("/{gameId:.+}")
     public ResponseEntity<?> getGameDetails(@PathVariable Long gameId) {
         Game fetchedGame = gameService.getGameById(gameId);
-        GetGameDetailsResponseDto responseDto = modelMapper.map(fetchedGame, GetGameDetailsResponseDto.class);
+        GetGameDetailsResponseDto responseDto = new GetGameDetailsResponseDto();
+        responseDto.setId(fetchedGame.getId());
+        responseDto.setPlayer1Id(fetchedGame.getPlayer1().getId());
+        responseDto.setPlayer2Id(fetchedGame.getPlayer2() != null ? fetchedGame.getPlayer2().getId() : null);
+        responseDto.setPlayer1Name(fetchedGame.getPlayer1().getUsername());
+        responseDto.setPlayer2Name(fetchedGame.getPlayer2() != null ? fetchedGame.getPlayer2().getUsername() : null);
+        User currentUser = userService.getCurrentUser();
+        int opponentPlayerNumber = 2;
+        if (Objects.equals(currentUser.getId(), responseDto.getPlayer2Id())) {
+            opponentPlayerNumber = 1;
+        }
+        responseDto.setOpponentPlayerNumber(opponentPlayerNumber);
+        responseDto.setStatus(fetchedGame.getStatus());
         return ResponseEntity.ok(responseDto);
+    }
+
+    @PostMapping("/{gameId:.+}/join")
+    public ResponseEntity<?> joinGame(@PathVariable Long gameId) {
+        gameService.joinGame(gameId);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/{gameId:.+}/leave")

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -47,12 +48,36 @@ public class GameServiceImpl implements GameService {
 
         fetchedGame.ifPresent( game -> {
             // only users playing specified game can fetch it's details
-            if (game.getPlayer1() != currentUser && game.getPlayer2() != currentUser) {
+            if (!Objects.equals(game.getPlayer1().getId(), currentUser.getId()) && !Objects.equals(game.getPlayer2().getId(), currentUser.getId())) {
                 throw new BadRequestException("error.operationNotPermitted");
             }
         });
 
         return fetchedGame.orElseThrow(() -> {
+            throw new NotFoundException("error.gameNotExists");
+        });
+    }
+
+    @Override
+    public void joinGame(Long gameId) {
+        User currentUser = userService.getCurrentUser();
+        Optional<Game> gameToJoin = gameRepository.findById(gameId);
+
+        gameToJoin.ifPresentOrElse( game -> {
+            // only different user than existing player 1 can join a game
+            if (Objects.equals(game.getPlayer1().getId(), currentUser.getId())) {
+                throw new BadRequestException("error.operationNotPermitted");
+            }
+
+            // game can be joined only when user is waiting for other player
+            if (game.getStatus() != GameStatus.WAITING_FOR_OTHER_PLAYER) {
+                throw new BadRequestException("error.operationNotPermitted");
+            }
+
+            game.setPlayer2(currentUser);
+            game.setStatus(GameStatus.IN_PROGRESS);
+            gameRepository.saveAndFlush(game);
+        }, () -> {
             throw new NotFoundException("error.gameNotExists");
         });
     }
@@ -64,7 +89,7 @@ public class GameServiceImpl implements GameService {
 
         gameToLeave.ifPresentOrElse( game -> {
             // only users playing specified game can leave it
-            if (game.getPlayer1() != currentUser && game.getPlayer2() != currentUser) {
+            if (!Objects.equals(game.getPlayer1().getId(), currentUser.getId()) && !Objects.equals(game.getPlayer2().getId(), currentUser.getId())) {
                 throw new BadRequestException("error.operationNotPermitted");
 
             }

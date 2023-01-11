@@ -7,7 +7,7 @@ import java.util.List;
 public interface GameService {
     List<Game> getAvailableGames();
     Game createNewGame();
-
     Game getGameById(Long gameId);
+    void joinGame(Long gameId);
     void leaveGame(Long gameId);
 }

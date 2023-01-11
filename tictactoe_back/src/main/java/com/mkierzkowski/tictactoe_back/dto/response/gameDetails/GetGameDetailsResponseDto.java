@@ -19,5 +19,7 @@ public class GetGameDetailsResponseDto {
     String player1Name;
     String player2Name;
 
+    Integer opponentPlayerNumber;
+
     GameStatus status;
 }

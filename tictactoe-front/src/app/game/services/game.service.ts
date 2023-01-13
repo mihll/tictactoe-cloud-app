@@ -28,7 +28,7 @@ export class GameService {
   }
 
   createNewGame() : Observable<CreateNewGameResponse> {
-    return this.http.post<CreateNewGameResponse>(`${this.apiURL}/new`, {},{withCredentials: true})
+    return this.http.post<CreateNewGameResponse>(`${this.apiURL}/new`, {},{withCredentials: true});
   }
 
   joinGame(gameId: string) : Observable<any> {

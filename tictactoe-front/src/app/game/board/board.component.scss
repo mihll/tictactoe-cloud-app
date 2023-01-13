@@ -1,0 +1,13 @@
+.board {
+  width: 600px;
+  display: flex;
+  justify-content: space-evenly;
+  align-content: space-between;
+  align-items: center;
+  margin: 7% auto auto auto;
+  flex-wrap: wrap;
+}
+
+.square-container {
+  flex: 0 0 32%;
+}

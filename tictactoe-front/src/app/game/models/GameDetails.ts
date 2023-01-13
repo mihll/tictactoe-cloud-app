@@ -1,4 +1,5 @@
 import { GameStatus } from "./GameStatus";
+import { BoardSquare } from "./BoardSquare";
 
 export interface GameDetails {
   id: string;
@@ -12,4 +13,8 @@ export interface GameDetails {
   opponentPlayerNumber: number;
 
   status: GameStatus;
+
+  board: BoardSquare[];
+
+  currentPlayerNumber: number;
 }

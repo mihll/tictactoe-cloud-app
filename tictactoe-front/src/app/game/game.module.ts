@@ -10,6 +10,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { SharedModule } from "../shared/shared.module";
 import { MatListModule } from "@angular/material/list";
 import { PlayGameComponent } from './play-game/play-game.component';
+import { BoardComponent } from './board/board.component';
 
 
 
@@ -17,7 +18,8 @@ import { PlayGameComponent } from './play-game/play-game.component';
   declarations: [
     BrowseGamesComponent,
     LeaderboardsComponent,
-    PlayGameComponent
+    PlayGameComponent,
+    BoardComponent
   ],
   imports: [
     CommonModule,

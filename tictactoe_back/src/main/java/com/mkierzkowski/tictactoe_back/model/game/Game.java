@@ -10,6 +10,8 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "games")
@@ -34,6 +36,12 @@ public class Game {
 
     @ManyToOne
     User winnerPlayer;
+
+    @ManyToOne
+    User currentPlayer;
+
+    @OneToMany(mappedBy = "game")
+    List<BoardSquare> board = new ArrayList<>();
 
     public Game(User gameCreator) {
         this.player1 = gameCreator;

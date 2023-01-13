@@ -3,6 +3,7 @@ package com.mkierzkowski.tictactoe_back.controller;
 import com.mkierzkowski.tictactoe_back.dto.response.availableGames.AvailableGameResponseDto;
 import com.mkierzkowski.tictactoe_back.dto.response.CreateNewGameResponseDto;
 import com.mkierzkowski.tictactoe_back.dto.response.availableGames.GetAvailableGamesResponseDto;
+import com.mkierzkowski.tictactoe_back.dto.response.gameDetails.BoardSquareResponseDto;
 import com.mkierzkowski.tictactoe_back.dto.response.gameDetails.GetGameDetailsResponseDto;
 import com.mkierzkowski.tictactoe_back.model.game.Game;
 import com.mkierzkowski.tictactoe_back.model.user.User;
@@ -66,6 +67,11 @@ public class GameController extends BaseController {
         }
         responseDto.setOpponentPlayerNumber(opponentPlayerNumber);
         responseDto.setStatus(fetchedGame.getStatus());
+        responseDto.setBoard(fetchedGame.getBoard()
+                .stream()
+                .map(boardSquare -> modelMapper.map(boardSquare, BoardSquareResponseDto.class))
+                .toList());
+
         return ResponseEntity.ok(responseDto);
     }
 

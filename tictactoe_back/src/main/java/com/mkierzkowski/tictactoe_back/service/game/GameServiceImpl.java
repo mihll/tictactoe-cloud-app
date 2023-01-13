@@ -2,9 +2,11 @@ package com.mkierzkowski.tictactoe_back.service.game;
 
 import com.mkierzkowski.tictactoe_back.exception.BadRequestException;
 import com.mkierzkowski.tictactoe_back.exception.NotFoundException;
+import com.mkierzkowski.tictactoe_back.model.game.BoardSquare;
 import com.mkierzkowski.tictactoe_back.model.game.Game;
 import com.mkierzkowski.tictactoe_back.model.game.GameStatus;
 import com.mkierzkowski.tictactoe_back.model.user.User;
+import com.mkierzkowski.tictactoe_back.repository.game.BoardSquareRepository;
 import com.mkierzkowski.tictactoe_back.repository.game.GameRepository;
 import com.mkierzkowski.tictactoe_back.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class GameServiceImpl implements GameService {
     @Autowired
     GameRepository gameRepository;
 
+    @Autowired
+    BoardSquareRepository  boardSquareRepository;
+
     @Override
     public List<Game> getAvailableGames() {
         User currentUser = userService.getCurrentUser();
@@ -38,7 +43,13 @@ public class GameServiceImpl implements GameService {
         User currentUser = userService.getCurrentUser();
         Game gameToCreate = new Game(currentUser);
 
-        return gameRepository.saveAndFlush(gameToCreate);
+        gameToCreate = gameRepository.saveAndFlush(gameToCreate);
+
+        for (int i = 0; i < 9; i++) {
+            boardSquareRepository.saveAndFlush(new BoardSquare().setGame(gameToCreate).setSquareId(i));
+        }
+
+        return gameToCreate;
     }
 
     @Override

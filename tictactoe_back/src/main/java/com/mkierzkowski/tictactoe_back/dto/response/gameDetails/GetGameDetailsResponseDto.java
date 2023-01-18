@@ -23,6 +23,10 @@ public class GetGameDetailsResponseDto {
 
     Integer opponentPlayerNumber;
 
+    Integer currentPlayerNumber;
+
+    Integer winnerPlayerNumber;
+
     List<BoardSquareResponseDto> board;
 
     GameStatus status;

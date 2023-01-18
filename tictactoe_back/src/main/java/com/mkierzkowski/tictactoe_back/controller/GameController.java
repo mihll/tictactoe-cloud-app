@@ -1,11 +1,13 @@
 package com.mkierzkowski.tictactoe_back.controller;
 
+import com.mkierzkowski.tictactoe_back.dto.request.GameBoardMoveRequestDto;
 import com.mkierzkowski.tictactoe_back.dto.response.availableGames.AvailableGameResponseDto;
 import com.mkierzkowski.tictactoe_back.dto.response.CreateNewGameResponseDto;
 import com.mkierzkowski.tictactoe_back.dto.response.availableGames.GetAvailableGamesResponseDto;
 import com.mkierzkowski.tictactoe_back.dto.response.gameDetails.BoardSquareResponseDto;
 import com.mkierzkowski.tictactoe_back.dto.response.gameDetails.GetGameDetailsResponseDto;
 import com.mkierzkowski.tictactoe_back.model.game.Game;
+import com.mkierzkowski.tictactoe_back.model.game.GameStatus;
 import com.mkierzkowski.tictactoe_back.model.user.User;
 import com.mkierzkowski.tictactoe_back.service.game.GameService;
 import com.mkierzkowski.tictactoe_back.service.user.UserService;
@@ -13,8 +15,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 
@@ -66,6 +70,18 @@ public class GameController extends BaseController {
             opponentPlayerNumber = 1;
         }
         responseDto.setOpponentPlayerNumber(opponentPlayerNumber);
+        if (Objects.equals(fetchedGame.getPlayer1().getId(), fetchedGame.getCurrentPlayer().getId())) {
+            responseDto.setCurrentPlayerNumber(1);
+        } else {
+            responseDto.setCurrentPlayerNumber(2);
+        }
+        if (fetchedGame.getStatus() == GameStatus.WON) {
+            if (Objects.equals(fetchedGame.getPlayer1().getId(), fetchedGame.getWinnerPlayer().getId())) {
+                responseDto.setWinnerPlayerNumber(1);
+            } else {
+                responseDto.setWinnerPlayerNumber(2);
+            }
+        }
         responseDto.setStatus(fetchedGame.getStatus());
         responseDto.setBoard(fetchedGame.getBoard()
                 .stream()
@@ -84,6 +100,12 @@ public class GameController extends BaseController {
     @PostMapping("/{gameId:.+}/leave")
     public ResponseEntity<?> leaveGame(@PathVariable Long gameId) {
         gameService.leaveGame(gameId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{gameId:.+}/boardMove")
+    public ResponseEntity<?> gameBoardMove(@PathVariable Long gameId, @RequestBody @Valid GameBoardMoveRequestDto gameBoardMoveRequestDto, Errors errors) {
+        gameService.boardMove(gameId, gameBoardMoveRequestDto, errors);
         return ResponseEntity.ok().build();
     }
 }

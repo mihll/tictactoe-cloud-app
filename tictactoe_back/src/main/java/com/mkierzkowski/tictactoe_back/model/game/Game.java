@@ -45,5 +45,6 @@ public class Game {
 
     public Game(User gameCreator) {
         this.player1 = gameCreator;
+        this.currentPlayer = gameCreator;
     }
 }

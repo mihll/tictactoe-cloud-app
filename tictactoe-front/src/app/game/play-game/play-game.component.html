@@ -7,8 +7,7 @@
     <mat-icon>logout</mat-icon>
   </button>
 </mat-toolbar>
-<div class="formCardContainer" ngClass.xs="small-mobilePadding">
-  Test
+<div class="formCardContainer mat-h1" ngClass.xs="small-mobilePadding">
+  {{headerText}}
 </div>
-<app-board></app-board>
-
+<app-board *ngIf="gameDetails.status !== GameStatus.WAITING_FOR_OTHER_PLAYER" [board]="gameDetails.board" [isMoveEnabled]="isMoveEnabled" (squareClickedEvent)="performMove($event)"></app-board>

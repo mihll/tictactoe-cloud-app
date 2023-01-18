@@ -1,0 +1,3 @@
+<div class="game-square" [ngClass]="{noClick: square.content !== null || !isSquareEnabled, squareDisabled: !isSquareEnabled}" (click)="squareClicked()">
+  <p>{{square.content}}</p>
+</div>

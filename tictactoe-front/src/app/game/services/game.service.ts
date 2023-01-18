@@ -6,6 +6,7 @@ import { map } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { CreateNewGameResponse } from "../models/CreateNewGameResponse";
 import { GameDetails } from "../models/GameDetails";
+import { BoardSquare } from "../models/BoardSquare";
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,10 @@ export class GameService {
 
   getGameDetails(gameId: string) : Observable<GameDetails> {
     return this.http.get<any>(`${this.apiURL}/${gameId}`,{withCredentials: true});
+  }
+
+  performMove(gameId: string, boardSquare: BoardSquare) : Observable<any> {
+    return this.http.post<any>(`${this.apiURL}/${gameId}/boardMove`,{boardSquareId: boardSquare.squareId},{withCredentials: true});
   }
 
   createNewGame() : Observable<CreateNewGameResponse> {

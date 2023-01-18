@@ -6,6 +6,7 @@ import { GameService } from "../services/game.service";
 import { SnackbarService } from "../../shared/snackbar/snackbar-service/snackbar.service";
 import { GameStatus } from "../models/GameStatus";
 import { catchError, filter, of, Subscription, switchMap, timer } from "rxjs";
+import { BoardSquare } from "../models/BoardSquare";
 
 @Component({
   selector: 'app-play-game',
@@ -19,7 +20,12 @@ export class PlayGameComponent implements OnInit, OnDestroy {
 
   titleText: String
 
+  headerText: String;
+
+  isMoveEnabled: boolean = false;
+
   gameDataSubscription?: Subscription;
+  GameStatus = GameStatus;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -31,6 +37,7 @@ export class PlayGameComponent implements OnInit, OnDestroy {
     this.gameDetails = this.activatedRoute.snapshot.data['gameDetails'];
     this.opponentName = this.gameDetails.opponentPlayerNumber === 1 ? this.gameDetails.player1Name : this.gameDetails.player2Name;
     this.titleText = this.gameDetails.status === GameStatus.WAITING_FOR_OTHER_PLAYER ? "Waiting for other player" : `against ${this.opponentName}`;
+    this.headerText = "Waiting for other player to join..."
     this.loading = false;
   }
 
@@ -53,12 +60,29 @@ export class PlayGameComponent implements OnInit, OnDestroy {
         this.gameDetails = response
         this.opponentName = this.gameDetails.opponentPlayerNumber === 1 ? this.gameDetails.player1Name : this.gameDetails.player2Name;
         this.titleText = this.gameDetails.status === GameStatus.WAITING_FOR_OTHER_PLAYER ? "Waiting for other player" : `against ${this.opponentName}`;
+        if (this.gameDetails.status === GameStatus.IN_PROGRESS) {
+          if (this.gameDetails.currentPlayerNumber !== this.gameDetails.opponentPlayerNumber) {
+            this.headerText = "Your turn!"
+            this.isMoveEnabled = true;
+          } else {
+            this.headerText = "Waiting for opponent move..."
+            this.isMoveEnabled = false;
+          }
+        }
         this.validateGameStatus();
       });
   }
 
   ngOnDestroy() {
     this.gameDataSubscription?.unsubscribe();
+  }
+
+  performMove(square: BoardSquare) {
+    // can perform move only on empty square and if move is enabled
+    if (square.content === null && this.isMoveEnabled) {
+      this.isMoveEnabled = false;
+      this.gameService.performMove(this.gameDetails.id, square).subscribe();
+    }
   }
 
   promptForLeaveConfirmation() {
@@ -76,7 +100,22 @@ export class PlayGameComponent implements OnInit, OnDestroy {
       case GameStatus.NOT_RESOLVED:
         this.gameDataSubscription?.unsubscribe();
         this.dialogService.openInfoDialog("Your opponent left the game",
-          "Your opponent has left this game session.<br>This game will be marked as 'not resolved' - it will not be counted as won or a draw in the ranks.",true,"/browseGames")
+          "Your opponent has left this game session.<br>This game will be marked as 'not resolved' - it will not be counted as won or a draw in the ranks.",true,"/browseGames");
+        break;
+      case GameStatus.WON:
+        this.gameDataSubscription?.unsubscribe();
+        if (this.gameDetails.winnerPlayerNumber != this.gameDetails.opponentPlayerNumber) {
+          this.dialogService.openInfoDialog("You won!",
+            "Congratulations!<br>This game will be counted as 'won' in the ranks",true,"/browseGames");
+        } else {
+          this.dialogService.openInfoDialog("You lose!",
+            "Too bad :(<br>This game will be counted as 'lost' in the ranks",true,"/browseGames");
+        }
+        break;
+      case GameStatus.DRAW:
+        this.gameDataSubscription?.unsubscribe();
+        this.dialogService.openInfoDialog("Draw!",
+          "You both did your best.<br>This game will be counted as 'draw' in the ranks",true,"/browseGames");
     }
   }
 

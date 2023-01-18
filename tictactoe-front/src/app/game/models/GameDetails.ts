@@ -17,4 +17,6 @@ export interface GameDetails {
   board: BoardSquare[];
 
   currentPlayerNumber: number;
+
+  winnerPlayerNumber: number;
 }

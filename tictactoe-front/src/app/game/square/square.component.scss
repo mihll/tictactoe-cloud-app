@@ -1,0 +1,26 @@
+.game-square {
+  height: 96%;
+  text-align: center;
+  line-height: 0.85;
+  cursor: pointer;
+  background: rgba(63, 81, 181, 0.24);
+  border-width: 1px;
+  border-radius: 0.5rem;
+  margin-bottom: 5px;
+}
+
+p {
+  display: inline;
+  margin: 0;
+  font-size: 14rem;
+  overflow: hidden;
+}
+
+.noClick {
+  cursor: not-allowed;
+}
+
+.squareDisabled {
+  color: gray;
+  background: rgba(63, 81, 181, 0.07);
+}

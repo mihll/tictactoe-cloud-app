@@ -1,5 +1,5 @@
 <div class="board">
-  <div class="square-container">
-
+  <div class="square-container" *ngFor="let boardSquare of board">
+    <app-square [square]="boardSquare" (squareClickedEvent)="squareClicked($event)" [isSquareEnabled]="isMoveEnabled"></app-square>
   </div>
 </div>

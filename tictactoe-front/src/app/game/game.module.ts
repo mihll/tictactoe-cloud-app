@@ -11,6 +11,7 @@ import { SharedModule } from "../shared/shared.module";
 import { MatListModule } from "@angular/material/list";
 import { PlayGameComponent } from './play-game/play-game.component';
 import { BoardComponent } from './board/board.component';
+import { SquareComponent } from './square/square.component';
 
 
 
@@ -19,7 +20,8 @@ import { BoardComponent } from './board/board.component';
     BrowseGamesComponent,
     LeaderboardsComponent,
     PlayGameComponent,
-    BoardComponent
+    BoardComponent,
+    SquareComponent
   ],
   imports: [
     CommonModule,

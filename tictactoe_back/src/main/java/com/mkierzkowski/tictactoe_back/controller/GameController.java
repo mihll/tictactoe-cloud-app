@@ -6,6 +6,8 @@ import com.mkierzkowski.tictactoe_back.dto.response.CreateNewGameResponseDto;
 import com.mkierzkowski.tictactoe_back.dto.response.availableGames.GetAvailableGamesResponseDto;
 import com.mkierzkowski.tictactoe_back.dto.response.gameDetails.BoardSquareResponseDto;
 import com.mkierzkowski.tictactoe_back.dto.response.gameDetails.GetGameDetailsResponseDto;
+import com.mkierzkowski.tictactoe_back.dto.response.ranks.GetRanksResponseDto;
+import com.mkierzkowski.tictactoe_back.dto.response.ranks.UserRankResponseDto;
 import com.mkierzkowski.tictactoe_back.model.game.Game;
 import com.mkierzkowski.tictactoe_back.model.game.GameStatus;
 import com.mkierzkowski.tictactoe_back.model.user.User;
@@ -19,6 +21,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,14 +41,37 @@ public class GameController extends BaseController {
 
     @GetMapping("/available")
     public ResponseEntity<GetAvailableGamesResponseDto> getAvailableGames() {
+        User currentUser = userService.getCurrentUser();
         List<Game> availableGames = gameService.getAvailableGames();
         GetAvailableGamesResponseDto responseDto = new GetAvailableGamesResponseDto();
 
-        responseDto.setAvailableGames(availableGames
-                .stream()
-                .map(availableGame -> modelMapper.map(availableGame, AvailableGameResponseDto.class))
-                .toList());
+        List<AvailableGameResponseDto> avGames = new ArrayList<>();
 
+        for (Game game: availableGames) {
+            AvailableGameResponseDto avGame = new AvailableGameResponseDto();
+            avGame.setId(game.getId());
+
+            if (game.getStatus() == GameStatus.IN_PROGRESS) {
+                if (Objects.equals(game.getPlayer1().getId(), currentUser.getId())) {
+                    avGame.setOpponentUsername(game.getPlayer2().getUsername());
+                    avGame.setMyGame(true);
+                } else if (Objects.equals(game.getPlayer2().getId(), currentUser.getId())) {
+                    avGame.setOpponentUsername(game.getPlayer1().getUsername());
+                    avGame.setMyGame(true);
+                }
+            } else {
+                if (Objects.equals(game.getPlayer1().getId(), currentUser.getId())) {
+                    avGame.setMyGame(true);
+                } else {
+                    avGame.setOpponentUsername(game.getPlayer1().getUsername());
+                    avGame.setMyGame(false);
+                }
+            }
+            avGames.add(avGame);
+        }
+
+        avGames.sort(Comparator.comparing(AvailableGameResponseDto::isMyGame).reversed());
+        responseDto.setAvailableGames(avGames);
         return ResponseEntity.ok(responseDto);
     }
 
@@ -107,5 +134,13 @@ public class GameController extends BaseController {
     public ResponseEntity<?> gameBoardMove(@PathVariable Long gameId, @RequestBody @Valid GameBoardMoveRequestDto gameBoardMoveRequestDto, Errors errors) {
         gameService.boardMove(gameId, gameBoardMoveRequestDto, errors);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/ranks")
+    public ResponseEntity<GetRanksResponseDto> getRanks() {
+        List<UserRankResponseDto> usersRanks = gameService.getRanks();
+        GetRanksResponseDto responseDto = new GetRanksResponseDto();
+        responseDto.setUsersRanks(usersRanks);
+        return ResponseEntity.ok(responseDto);
     }
 }

@@ -1,6 +1,7 @@
 package com.mkierzkowski.tictactoe_back.service.game;
 
 import com.mkierzkowski.tictactoe_back.dto.request.GameBoardMoveRequestDto;
+import com.mkierzkowski.tictactoe_back.dto.response.ranks.UserRankResponseDto;
 import com.mkierzkowski.tictactoe_back.exception.BadRequestException;
 import com.mkierzkowski.tictactoe_back.exception.NotFoundException;
 import com.mkierzkowski.tictactoe_back.exception.ValidationException;
@@ -11,35 +12,47 @@ import com.mkierzkowski.tictactoe_back.model.game.GameStatus;
 import com.mkierzkowski.tictactoe_back.model.user.User;
 import com.mkierzkowski.tictactoe_back.repository.game.BoardSquareRepository;
 import com.mkierzkowski.tictactoe_back.repository.game.GameRepository;
+import com.mkierzkowski.tictactoe_back.repository.user.UserRepository;
 import com.mkierzkowski.tictactoe_back.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class GameServiceImpl implements GameService {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    GameRepository gameRepository;
+    private GameRepository gameRepository;
 
     @Autowired
-    BoardSquareRepository  boardSquareRepository;
+    private BoardSquareRepository  boardSquareRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public List<Game> getAvailableGames() {
         User currentUser = userService.getCurrentUser();
 
         List<Game> allGames = gameRepository.findAll();
-        return allGames.stream()
-                .filter(game -> game.getPlayer1() != currentUser && game.getPlayer2() == null)
-                .toList();
+        ArrayList<Game> availableGames = new ArrayList<>();
+
+        // all games that are waiting for other player
+        availableGames.addAll(allGames.stream()
+                .filter(game -> game.getStatus() == GameStatus.WAITING_FOR_OTHER_PLAYER)
+                .toList());
+
+        // all games that are currently played by the current user
+        availableGames.addAll(allGames.stream()
+                .filter(game -> game.getStatus() == GameStatus.IN_PROGRESS)
+                .filter(game -> Objects.equals(game.getPlayer1().getId(), currentUser.getId()) || Objects.equals(game.getPlayer2().getId(), currentUser.getId()))
+                .toList());
+
+        return availableGames;
     }
 
     @Override
@@ -231,5 +244,61 @@ public class GameServiceImpl implements GameService {
         } else {
             return content.toString();
         }
+    }
+
+    @Override
+    public List<UserRankResponseDto> getRanks() {
+        List<User> allUsers = userRepository.findAll();
+        List<UserRankResponseDto> userRanks = new ArrayList<>();
+        for (User user: allUsers) {
+            int wins = 0;
+            int loses = 0;
+            int draws = 0;
+
+            for (Game myGame: user.getMyGames()) {
+                if (myGame.getStatus() == GameStatus.DRAW) {
+                    draws += 1;
+                }
+
+                if (myGame.getStatus() == GameStatus.WON) {
+                    if (Objects.equals(myGame.getWinnerPlayer().getId(), user.getId())) {
+                        wins += 1;
+                    } else {
+                        loses += 1;
+                    }
+                }
+            }
+
+            for (Game joinedGame: user.getJoinedGames()) {
+                if (joinedGame.getStatus() == GameStatus.DRAW) {
+                    draws += 1;
+                }
+
+                if (joinedGame.getStatus() == GameStatus.WON) {
+                    if (Objects.equals(joinedGame.getWinnerPlayer().getId(), user.getId())) {
+                        wins += 1;
+                    } else {
+                        loses += 1;
+                    }
+                }
+            }
+
+            // set userRank fields and append
+            UserRankResponseDto userRank = new UserRankResponseDto();
+            userRank.setUsername(user.getUsername());
+            userRank.setWins(wins);
+            userRank.setLoses(loses);
+            userRank.setDraws(draws);
+            userRanks.add(userRank);
+        }
+
+        // sort rank by wins
+        userRanks.sort(Comparator.comparing(UserRankResponseDto::getWins).reversed());
+        for (int i = 0; i < userRanks.size(); i++) {
+            UserRankResponseDto userRank = userRanks.get(i);
+            userRank.setRankPosition(i+1);
+        }
+
+        return userRanks;
     }
 }

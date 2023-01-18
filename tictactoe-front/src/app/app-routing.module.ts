@@ -10,6 +10,7 @@ import { LeaderboardsComponent } from "./game/leaderboards/leaderboards.componen
 import { BrowseGamesResolver } from "./game/resolvers/browse-games.resolver";
 import { PlayGameComponent } from "./game/play-game/play-game.component";
 import { GameDetailsResolver } from "./game/resolvers/game-details.resolver";
+import { UserRanksResolver } from "./game/resolvers/user-ranks.resolver";
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent, canActivate: [NotAuthGuard]},
@@ -17,7 +18,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [NotAuthGuard]},
   { path: 'signup', component: SignUpComponent, canActivate: [NotAuthGuard]},
   { path: 'browseGames', component: BrowseGamesComponent, resolve: {availableGames: BrowseGamesResolver}, canActivate: [AuthGuard]},
-  { path: 'leaderboards', component: LeaderboardsComponent, canActivate: [AuthGuard]},
+  { path: 'leaderboards', component: LeaderboardsComponent, resolve: {userRanks: UserRanksResolver}, canActivate: [AuthGuard]},
   { path: 'playGame/:gameId', component: PlayGameComponent, resolve: {gameDetails: GameDetailsResolver}, canActivate: [AuthGuard]},
   // otherwise redirect to landing page
   { path: '**', redirectTo: 'landingPage' }

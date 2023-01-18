@@ -7,6 +7,7 @@ import { Observable } from "rxjs";
 import { CreateNewGameResponse } from "../models/CreateNewGameResponse";
 import { GameDetails } from "../models/GameDetails";
 import { BoardSquare } from "../models/BoardSquare";
+import { UserRank } from "../models/UserRank";
 
 @Injectable({
   providedIn: 'root'
@@ -42,5 +43,10 @@ export class GameService {
 
   leaveGame(gameId: string) : Observable<any> {
     return this.http.post<any>(`${this.apiURL}/${gameId}/leave`,{},{withCredentials: true});
+  }
+
+  getUsersRanks(): Observable<UserRank[]> {
+    return this.http.get<any>(`${this.apiURL}/ranks`, {withCredentials: true})
+      .pipe(map(response => response.usersRanks));
   }
 }

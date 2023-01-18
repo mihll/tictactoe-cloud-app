@@ -12,6 +12,8 @@ import { MatListModule } from "@angular/material/list";
 import { PlayGameComponent } from './play-game/play-game.component';
 import { BoardComponent } from './board/board.component';
 import { SquareComponent } from './square/square.component';
+import { MatTableModule } from "@angular/material/table";
+import { MatSortModule } from "@angular/material/sort";
 
 
 
@@ -32,7 +34,9 @@ import { SquareComponent } from './square/square.component';
     MatToolbarModule,
     MatIconModule,
     SharedModule,
-    MatListModule
+    MatListModule,
+    MatTableModule,
+    MatSortModule
   ]
 })
 export class GameModule { }

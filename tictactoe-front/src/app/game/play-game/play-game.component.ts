@@ -106,16 +106,16 @@ export class PlayGameComponent implements OnInit, OnDestroy {
         this.gameDataSubscription?.unsubscribe();
         if (this.gameDetails.winnerPlayerNumber != this.gameDetails.opponentPlayerNumber) {
           this.dialogService.openInfoDialog("You won!",
-            "Congratulations!<br>This game will be counted as 'won' in the ranks",true,"/browseGames");
+            "Congratulations!<br>This game will be counted as 'won' in the ranks.",true,"/browseGames");
         } else {
           this.dialogService.openInfoDialog("You lose!",
-            "Too bad :(<br>This game will be counted as 'lost' in the ranks",true,"/browseGames");
+            "Too bad :(<br>This game will be counted as 'lost' in the ranks.",true,"/browseGames");
         }
         break;
       case GameStatus.DRAW:
         this.gameDataSubscription?.unsubscribe();
         this.dialogService.openInfoDialog("Draw!",
-          "You both did your best.<br>This game will be counted as 'draw' in the ranks",true,"/browseGames");
+          "You both did your best.<br>This game will be counted as 'draw' in the ranks.",true,"/browseGames");
     }
   }
 

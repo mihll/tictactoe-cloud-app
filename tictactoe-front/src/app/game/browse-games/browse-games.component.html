@@ -13,9 +13,18 @@
 <div  ngClass.xs="small-mobilePadding">
   <div *ngIf="availableGames.length != 0; else noAvailableGames" fxFill>
     <mat-list *ngFor="let availableGame of availableGames; let last = last">
-      <mat-list-item>
-        Game against:
-        <div class="opponentUsername">{{availableGame.oponentUsername}}</div>
+      <mat-list-item *ngIf="availableGame.myGame">
+        Your game -
+        <div class="opponentUsername" *ngIf="availableGame.opponentUsername !== null">against {{availableGame.opponentUsername}}</div>
+        <div class="opponentUsername" *ngIf="availableGame.opponentUsername === null">Waiting for other player...</div>
+        <span class="fill-remaining-space"></span>
+        <button mat-flat-button color="primary" (click)="playGame(availableGame.id)">
+          Play
+        </button>
+      </mat-list-item>
+      <mat-list-item *ngIf="!availableGame.myGame">
+        Game against -
+        <div class="opponentUsername">{{availableGame.opponentUsername}}</div>
         <span class="fill-remaining-space"></span>
         <button mat-flat-button color="primary" (click)="joinGame(availableGame.id)">
           Join

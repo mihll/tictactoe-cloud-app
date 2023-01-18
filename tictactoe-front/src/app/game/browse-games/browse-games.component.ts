@@ -49,4 +49,8 @@ export class BrowseGamesComponent implements OnInit {
     })
   }
 
+  playGame(gameId: string) : void {
+    this.router.navigate([`/playGame/${gameId}`]);
+  }
+
 }

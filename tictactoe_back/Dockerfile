@@ -1,13 +1,8 @@
-FROM amazoncorretto:17
-
-RUN apt-get update -y
-RUN apt-get install -y binutils
-
+FROM gradle:jdk17-alpine AS build
 WORKDIR /app
-
 COPY . .
+RUN gradle build
 
-RUN ./gradlew bootJar
-COPY build/libs/*.jar tictactoe_back.jar
-
-CMD ["java", "-jar", "tictactoe_back.jar"]
+FROM eclipse-temurin:17-jre-alpine
+COPY --from=build /app/build/libs/*.jar tictactoe_back.jar
+CMD ["java", "-jar", "tictactoe_back.jar", "--debug"]

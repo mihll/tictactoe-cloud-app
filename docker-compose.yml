@@ -1,11 +1,13 @@
 version: '3'
 services:
   db:
-    image: 'mysql:8.0.31'
+    image: 'mysql:latest'
     volumes:
             - ./tictactoe_back/src/main/resources/create_database.sql:/docker-entrypoint-initdb.d/create_database.sql
     expose:
            - "3306"
+    environment:
+           - MYSQL_ROOT_PASSWORD=aB12345!
     restart: on-failure
 
   backend:

@@ -1,0 +1,29 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+      "name": "tictactoe-cloud-app-backend",
+      "image": "363822337133.dkr.ecr.us-east-1.amazonaws.com/tictactoe-cloud-app-backend:latest",
+      "essential": true,
+      "memory": 256,
+      "portMappings": [
+        {
+          "hostPort": 8080,
+          "containerPort": 8080
+        }
+      ]
+    },
+    {
+      "name": "tictactoe-cloud-app-frontend",
+      "image": "363822337133.dkr.ecr.us-east-1.amazonaws.com/tictactoe-cloud-app-frontend:latest",
+      "essential": true,
+      "memory": 256,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ]
+    }
+  ]
+}

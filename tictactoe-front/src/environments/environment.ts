@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080/api'
+  apiUrl: 'http://tictactoecloudapp-env-1.eba-syb4mqbq.us-east-1.elasticbeanstalk.com:8080/api'
 };
 
 /*
